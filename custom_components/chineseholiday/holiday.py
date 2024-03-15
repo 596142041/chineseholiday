@@ -160,7 +160,9 @@ class Holiday:
     @classmethod
     def tomorrow(cls):
         return Holiday.day(1)
-
+    def weekday_str(tm):
+        a = '星期一 星期二 星期三 星期四 星期五 星期六 星期日'.split()
+        return a[tm]
     #根据节假日 计算最近一次假日的放假策略
     #参数 在 30 - 45 天之内的显示
     def nearest_holiday_info(self,min_days=30,max_days=45):
@@ -210,16 +212,19 @@ class Holiday:
                         for item in before_start_workdays:
                             date = item['date']
                             invert = item['invert']
-                            before += " {}/{}".format(date.month,date.day)
+                            before += " {}月{}日,".format(date.month,date.day)
                             if invert:
-                                before += "(串休日，周{})".format(date.weekday()+1) 
+                                #before += "(调休日，周{})".format(date.weekday()+1) 
+                                before += "(调休日，{}),".format(Holiday.weekday_str(date.weekday())) 
                         for item in after_end_workdays:
                             date = item['date']
                             invert = item['invert']
-                            after += " {}/{}".format(date.month,date.day)
+                            after += " {}月{}日,".format(date.month,date.day)
                             if invert:
-                                after += "(串休日，周{})".format(date.weekday()+1) 
-                        info = "{}(周{})-{} 放假 共{}天\n据上一次休息{}天 {} \n据下一次休息{}天 {}".format(start.strftime('%m/%d'),start.weekday()+1,end.strftime('%m/%d'),(end-start).days+1,(start-last_weekend).days-1,before,(next_weekend-end).days-1,after)
+                                #after += "(调休日，周{})".format(date.weekday()+1) 
+                                after += "(调休日，{}),".format(Holiday.weekday_str(date.weekday())) 
+                                #weekday_str
+                        info = "近期放假时间:{}月{}日({})～{}月{}日 共计{}天\n据上一次休息{}天,分别为:{} \n据下一次休息{}天,分别为:{}".format(start.strftime('%m'),start.strftime('%d'),Holiday.weekday_str(start.weekday()),end.strftime('%m'),end.strftime('%d'),(end-start).days+1,(start-last_weekend).days-1,before,(next_weekend-end).days-1,after)
                         _LOGGER.debug("Holiday:nearest_holiday_info:"+info)
                         return info
         return ''

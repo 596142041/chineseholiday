@@ -430,11 +430,10 @@ class CalendarToday:
         return str(solar_year) + "年" + str(solar_month) + "月" + str(solar_day) + "日"
 
     def solar_week_number(self):
-        return datetime.datetime(int(solar_year), int(solar_month), int(solar_day)).isocalendar()[1]
-
-    def solar_week_number_description(self):#周数  ChineseWord.week_num_str
-        return "第"+ChineseWord.week_num_str(self.solar_week_number()) + "周"
-        #return "第"+str(datetime.datetime(int(solar_year), int(solar_month), int(solar_day)).isocalendar()[1]) + "周"
+        #return datetime.datetime(int(solar_year), int(solar_month), int(solar_day)).isocalendar()[1]
+        return ChineseWord.week_num_str(datetime.datetime(int(solar_year), int(solar_month), int(solar_day)).isocalendar()[1])
+    def solar_week_number_description(self):#周数
+        return "第"+ChineseWord.week_num_str(datetime.datetime(int(solar_year), int(solar_month), int(solar_day)).isocalendar()[1]) + "周"
 
     def week_description(self):
         #星期几
